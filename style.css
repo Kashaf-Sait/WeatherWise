@@ -1,38 +1,52 @@
 /* 🌤 Base styling */
+:root {
+  --font-base: 'Inter', sans-serif;
+  --color-primary: #0288d1;
+  --color-bg-light: #f4f9ff;
+  --color-bg-default: #87ceeb;
+  --color-text: #333;
+  --transition-fast: 0.3s ease;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-base);
+  color: var(--color-text);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   transition: background 0.5s ease;
+  background: linear-gradient(to bottom, var(--color-bg-default), #e0f7fa);
 }
 
-/* 📦 Main container */
 .container {
   background: white;
   padding: 25px 30px;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   text-align: center;
   width: 90%;
   max-width: 420px;
 }
 
-/* 🧠 Heading */
-.container h1 {
+h1 {
   margin-bottom: 20px;
-  color: #0288d1;
-  font-weight: bold;
+  font-weight: 600;
+  color: var(--color-primary);
 }
 
-/* 🔍 Input & button */
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 input, button {
-  width: calc(100% - 16px);
+  flex: 1 1 120px;
   padding: 12px;
-  margin: 8px 0;
   font-size: 16px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -40,28 +54,41 @@ input, button {
 }
 
 input:focus {
-  border-color: #0288d1;
+  border-color: var(--color-primary);
 }
 
 button {
-  background: #0288d1;
+  background: var(--color-primary);
   color: white;
   border: none;
-  transition: background 0.3s ease;
+  cursor: pointer;
+  transition: background var(--transition-fast);
 }
 
 button:hover {
   background: #026aa7;
 }
 
-/* 🌈 Weather result card */
+#micButton {
+  background: #4caf50;
+}
+#micButton:hover {
+  background: #43a047;
+}
+
+/* 🌈 Weather card */
 .weather-card {
   margin-top: 20px;
   padding: 20px;
-  background: #f4f9ff;
+  background: var(--color-bg-light);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   text-align: left;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+.weather-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
 }
 
 .weather-header {
@@ -73,59 +100,57 @@ button:hover {
 .weather-icon {
   width: 80px;
   height: 80px;
+  animation: fadeIn var(--transition-fast);
 }
 
 .weather-summary h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 1.4rem;
 }
-
 .weather-temp {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 1.2rem;
   margin-top: 4px;
 }
 
+.weather-details {
+  margin-top: 16px;
+  display: grid;
+  gap: 8px;
+}
 .weather-details p {
-  margin: 6px 0;
-  font-size: 14px;
+  margin: 0;
+  font-size: 0.95rem;
+}
+.weather-details .outfit {
+  font-style: italic;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* 📱 Responsive */
 @media (max-width: 480px) {
-  .container {
-    padding: 20px;
-  }
-  input, button {
-    font-size: 15px;
-  }
-  .weather-header {
-    flex-direction: column;
-    align-items: center;
-  }
+  .controls { flex-direction: column; }
 }
 
 /* 🌤 Dynamic backgrounds */
 body.clear {
   background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
 }
-
 body.clouds {
   background: linear-gradient(to bottom, #bdc3c7, #2c3e50);
 }
-
 body.rain {
   background: linear-gradient(to bottom, #4e54c8, #8f94fb);
 }
-
 body.snow {
   background: linear-gradient(to bottom, #e0eafc, #cfdef3);
 }
-
 body.thunderstorm {
   background: linear-gradient(to bottom, #373b44, #4286f4);
 }
-
 body.default {
-  background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
+  background: linear-gradient(to bottom, var(--color-bg-default), #e0f7fa);
 }

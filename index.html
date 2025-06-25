@@ -12,30 +12,15 @@
 </head>
 <body>
   <div class="container">
-    <h1>🌦 WeatherWise</h1>
-    <input type="text" id="cityInput" placeholder="Enter city name" />
-    <button onclick="getWeather()">Get Weather</button>
+    <h1>🌤 <span>Weather</span>Wise</h1>
 
-    <!-- Results will be injected here by script.js -->
-    <div id="weatherResult">
-      <!-- Example structure (injected dynamically):
-      <div class="weather-card">
-        <div class="weather-header">
-          <img src="ICON_URL" alt="description" class="weather-icon" />
-          <div class="weather-summary">
-            <h2>City Name</h2>
-            <p class="weather-temp"><strong>23.5°C</strong> – clear sky</p>
-          </div>
-        </div>
-        <div class="weather-details">
-          <p><strong>Humidity:</strong> 56%</p>
-          <p><strong>Wind:</strong> 3.2 m/s</p>
-          <p><strong>Outfit:</strong> Wear a light jacket</p>
-          <p><strong>AQI:</strong> 🟡 Fair</p>
-        </div>
-      </div>
-      -->
+    <div class="controls">
+      <input type="text" id="cityInput" placeholder="Enter city name" />
+      <button onclick="getWeather()">Get Weather</button>
+      <button id="micButton" onclick="startVoice()">🎤 Speak</button>
     </div>
+
+    <div id="weatherResult"><!-- injected by script.js --></div>
   </div>
 
   <script src="script.js"></script>
