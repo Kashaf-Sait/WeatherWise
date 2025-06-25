@@ -4,26 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WeatherWise</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- 🌗 Theme toggle -->
-  <button id="themeToggle" title="Toggle theme">🌙</button>
+  <!-- 🌙/🌞 Theme Toggle Icon Only -->
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
 
-  <main class="container">
+  <div class="container">
     <h1>🌤 <span>Weather</span>Wise</h1>
 
-    <section class="controls">
+    <div class="controls">
       <input type="text" id="cityInput" placeholder="Enter city name" />
-      <button onclick="getWeather()">🔍 Get Weather</button>
+      <button onclick="getWeather()">Get Weather</button>
       <button id="micButton" onclick="startVoice()">🎤 Speak</button>
-    </section>
+    </div>
 
-    <section id="weatherResult">
-      <!-- JS injects weather card here -->
-    </section>
-  </main>
+    <div id="weatherResult"><!-- Cards injected dynamically --></div>
+  </div>
 
   <script src="script.js"></script>
 </body>

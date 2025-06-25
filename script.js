@@ -1,144 +1,113 @@
-// WeatherWise JS: Enhanced Version with Icons, Theme Toggle & Ripple
-
 const apiKey = "05ebaecbfa346ac7358838299cd7f93e";
+
+// Format date to 12-hour clock
+function formatTo12Hour(date) {
+  let hrs = date.getUTCHours();
+  let mins = date.getUTCMinutes();
+  const ampm = hrs >= 12 ? 'PM' : 'AM';
+  hrs = hrs % 12 || 12;
+  mins = mins < 10 ? '0' + mins : mins;
+  return `${hrs}:${mins} ${ampm}`;
+}
 
 async function getWeather() {
   const city = document.getElementById("cityInput").value.trim();
   const resultBox = document.getElementById("weatherResult");
-
-  if (!city) {
-    resultBox.innerHTML = "❗ Please enter a city name.";
-    return;
-  }
+  if (!city) return resultBox.innerHTML = "❗ Please enter a city name.";
 
   resultBox.innerHTML = "⏳ Fetching weather...";
-
   try {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
-    const res = await fetch(url);
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`);
     if (!res.ok) throw new Error("City not found");
     const data = await res.json();
-
     const { name, coord, main, weather, wind, timezone } = data;
+
+    // AQI
+    const aqiData = await (await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${coord.lat}&lon=${coord.lon}&appid=${apiKey}`)).json();
+    const aqiLabel = ["🟢 Good","🟡 Fair","🟠 Moderate","🔴 Poor","⚫ Very Poor"][aqiData.list[0].main.aqi - 1];
+
+    // UV
+    const uvData = await (await fetch(`https://api.openweathermap.org/data/2.5/uvi?lat=${coord.lat}&lon=${coord.lon}&appid=${apiKey}`)).json();
+
+    // Background class
+    const desc = weather[0].description.toLowerCase();
+    document.body.className = desc.includes("clear") ? "clear"
+      : desc.includes("cloud") ? "clouds"
+      : desc.includes("rain") ? "rain"
+      : desc.includes("snow") ? "snow"
+      : desc.includes("thunderstorm") ? "thunderstorm"
+      : "default";
+
+    // Outfit suggestion
     const temp = parseFloat(main.temp.toFixed(1));
-    const desc = (weather[0]?.description || "").toLowerCase();
-    const humidity = main.humidity;
-    const windSpeed = wind.speed;
-    const { lat, lon } = coord;
+    const outfit = temp > 30 ? "🥵 Wear light cotton clothes & stay hydrated!"
+      : temp >= 20 ? "🌤 Comfortable casuals are perfect."
+      : temp >= 10 ? "🧥 Wear a jacket or hoodie."
+      : "❄ Bundle up! It’s very cold.";
 
-    // 🟫 AQI
-    const aqiRes = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
-    const aqiData = await aqiRes.json();
-    const aqiIndex = aqiData.list[0].main.aqi;
-    const aqiLabel = ["🟢 Good", "🟡 Fair", "🟠 Moderate", "🔴 Poor", "⚫ Very Poor"][aqiIndex - 1] || "Unknown";
+    // Local time
+    const localTime = formatTo12Hour(new Date(Date.now() + timezone * 1000));
 
-    // ☀ UV Index
-    const uvRes = await fetch(`https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${apiKey}`);
-    const uvData = await uvRes.json();
-    const uv = uvData.value;
-    const uvLabel = uv < 3 ? "🟢 Low" : uv < 6 ? "🟡 Moderate" : uv < 8 ? "🟠 High" : uv < 11 ? "🔴 Very High" : "⚫ Extreme";
-
-    // 🎨 Background class based on weather
-    document.body.className = "";
-    if (desc.includes("clear")) document.body.classList.add("clear");
-    else if (desc.includes("cloud")) document.body.classList.add("clouds");
-    else if (desc.includes("rain")) document.body.classList.add("rain");
-    else if (desc.includes("snow")) document.body.classList.add("snow");
-    else if (desc.includes("thunderstorm")) document.body.classList.add("thunderstorm");
-    else document.body.classList.add("default");
-
-    // 🧥 Outfit suggestion
-    const outfitMsg =
-      temp > 30 ? "🥵 Wear light cotton clothes & stay hydrated!" :
-      temp >= 20 ? "🌤 Comfortable casuals are perfect." :
-      temp >= 10 ? "🧥 Wear a jacket or hoodie." :
-      "❄ Bundle up! It’s very cold.";
-
-    // ⏰ Format local time (12hr)
-    const localDate = new Date(Date.now() + timezone * 1000);
-    const localTimeStr = (() => {
-      let hrs = localDate.getUTCHours();
-      let min = localDate.getUTCMinutes();
-      const ampm = hrs >= 12 ? 'PM' : 'AM';
-      hrs = hrs % 12 || 12;
-      return `${hrs}:${min < 10 ? '0' + min : min} ${ampm}`;
-    })();
-
-    // 🌤 Feather icon selection
-    const weatherMain = weather[0].main.toLowerCase();
-    const iconMap = {
-      clear: 'sun',
-      clouds: 'cloud',
-      rain: 'cloud-rain',
-      snow: 'cloud-snow',
-      thunderstorm: 'cloud-lightning'
-    };
-    const featherIcon = iconMap[weatherMain] || 'cloud';
-
-    // 🧾 Inject Result
+    // Render cards
     resultBox.innerHTML = `
       <div class="weather-card">
         <div class="weather-header">
-          <i data-feather="${featherIcon}" class="weather-icon"></i>
+          <img src="https://openweathermap.org/img/wn/${weather[0].icon}@2x.png" alt="${desc}" class="weather-icon"/>
           <div class="weather-summary">
             <h2>${name}</h2>
             <p class="weather-temp"><strong>${temp}°C</strong> – ${desc}</p>
           </div>
         </div>
       </div>
-
       <div class="weather-card weather-details">
-        <p><strong>Humidity:</strong> ${humidity}%</p>
-        <p><strong>Wind Speed:</strong> ${windSpeed} m/s</p>
+        <p><strong>Humidity:</strong> ${main.humidity}%</p>
+        <p><strong>Wind Speed:</strong> ${wind.speed} m/s</p>
         <p><strong>AQI:</strong> ${aqiLabel}</p>
-        <p><strong>UV Index:</strong> ${uvLabel}</p>
+        <p><strong>UV Index:</strong> ${uvData.value < 3 ? "🟢 Low" : uvData.value < 6 ? "🟡 Moderate" : uvData.value < 8 ? "🟠 High" : uvData.value < 11 ? "🔴 Very High" : "⚫ Extreme"}</p>
       </div>
-
       <div class="weather-card">
-        <p><strong>Local Time:</strong> ${localTimeStr}</p>
-        <p class="outfit"><strong>Outfit Suggestion:</strong> ${outfitMsg}</p>
+        <p><strong>Local Time:</strong> ${localTime}</p>
+        <p class="outfit"><strong>Outfit:</strong> ${outfit}</p>
       </div>
     `;
-
-    // Render Feather icons
-    if (window.feather) feather.replace();
-
   } catch (err) {
-    resultBox.innerHTML = err.message.includes("City not found")
-      ? "❌ City not found. Please check spelling!"
-      : `⚠ Error: ${err.message}`;
+    document.getElementById("weatherResult").innerHTML =
+      err.message === "City not found"
+        ? "❌ City not found. Check spelling!"
+        : `⚠ Error: ${err.message}`;
   }
 }
 
-// 🎙 Voice input
+// Enter key to search
+document.getElementById("cityInput").addEventListener("keyup", e => {
+  if (e.key === "Enter") getWeather();
+});
+
+// Voice input
 function startVoice() {
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-  recognition.onresult = e => {
+  const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  rec.lang = 'en-US';
+  rec.interimResults = false;
+  rec.onresult = e => {
     document.getElementById("cityInput").value = e.results[0][0].transcript;
     getWeather();
   };
-  recognition.onerror = e => alert("🎤 Voice error: " + e.error);
-  recognition.start();
+  rec.onerror = e => alert("🎤 Voice error: " + e.error);
+  rec.start();
 }
 
-// ⌨ Enter key trigger
-document.getElementById("cityInput")
-  .addEventListener("keyup", e => { if (e.key === "Enter") getWeather(); });
-
-// 🌗 Theme toggle
-document.getElementById("themeToggle")?.addEventListener("click", () => {
+// Theme toggle button (only icon)
+const themeBtn = document.querySelector(".theme-toggle");
+themeBtn.addEventListener("click", () => {
   document.body.classList.toggle("dark");
-  const btn = document.getElementById("themeToggle");
-  btn.textContent = document.body.classList.contains("dark") ? "☀" : "🌙";
+  themeBtn.textContent = document.body.classList.contains("dark") ? "🌞" : "🌙";
+  localStorage.setItem("weather-theme", document.body.classList.contains("dark") ? "dark" : "light");
 });
 
-// 💧 Button ripple click tracking
-document.querySelectorAll("button").forEach(btn => {
-  btn.addEventListener("click", e => {
-    const rect = btn.getBoundingClientRect();
-    btn.style.setProperty('--x', `${e.clientX - rect.left}px`);
-    btn.style.setProperty('--y', `${e.clientY - rect.top}px`);
-  });
-  });
+// Load saved theme
+window.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("weather-theme") === "dark") {
+    document.body.classList.add("dark");
+    themeBtn.textContent = "🌞";
+  }
+});
