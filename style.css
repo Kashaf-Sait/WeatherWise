@@ -1,81 +1,131 @@
-/* Base styling */
+/* 🌤 Base styling */
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  transition: background 0.5s ease;
 }
 
-/* Container card */
+/* 📦 Main container */
 .container {
   background: white;
-  padding: 20px 30px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  padding: 25px 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 90%;
-  max-width: 400px;
+  max-width: 420px;
 }
 
-/* Heading */
+/* 🧠 Heading */
 .container h1 {
   margin-bottom: 20px;
+  color: #0288d1;
+  font-weight: bold;
 }
 
-/* Input and button */
+/* 🔍 Input & button */
 input, button {
-  width: calc(100% - 20px);
-  padding: 10px;
+  width: calc(100% - 16px);
+  padding: 12px;
   margin: 8px 0;
   font-size: 16px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #ccc;
+  outline: none;
+}
+
+input:focus {
+  border-color: #0288d1;
 }
 
 button {
   background: #0288d1;
   color: white;
   border: none;
-  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  background: #0277bd;
+  background: #026aa7;
 }
 
-/* Weather card inside container */
+/* 🌈 Weather result card */
 .weather-card {
   margin-top: 20px;
-  padding: 15px;
-  background: #f9f9f9;
-  border-radius: 8px;
+  padding: 20px;
+  background: #f4f9ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  text-align: left;
 }
 
-/* Weather details */
-.weather-card h2 {
-  margin: 10px 0;
+.weather-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-.weather-card img {
+.weather-icon {
   width: 80px;
   height: 80px;
 }
 
-.weather-card p {
+.weather-summary h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.weather-temp {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.weather-details p {
   margin: 6px 0;
   font-size: 14px;
 }
 
-/* Responsive tweak */
+/* 📱 Responsive */
 @media (max-width: 480px) {
   .container {
-    padding: 15px 20px;
+    padding: 20px;
   }
   input, button {
-    font-size: 14px;
+    font-size: 15px;
   }
+  .weather-header {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* 🌤 Dynamic backgrounds */
+body.clear {
+  background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
+}
+
+body.clouds {
+  background: linear-gradient(to bottom, #bdc3c7, #2c3e50);
+}
+
+body.rain {
+  background: linear-gradient(to bottom, #4e54c8, #8f94fb);
+}
+
+body.snow {
+  background: linear-gradient(to bottom, #e0eafc, #cfdef3);
+}
+
+body.thunderstorm {
+  background: linear-gradient(to bottom, #373b44, #4286f4);
+}
+
+body.default {
+  background: linear-gradient(to bottom, #87ceeb, #e0f7fa);
 }
