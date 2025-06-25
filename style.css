@@ -1,4 +1,3 @@
-/* 🌤 Base styling */
 :root {
   --font-base: 'Inter', sans-serif;
   --color-primary: #0288d1;
@@ -8,6 +7,15 @@
   --transition-fast: 0.3s ease;
 }
 
+/* 🌙 Dark theme overrides */
+body.dark {
+  --color-bg-default: #1e1e2f;
+  --color-bg-light: #2e2e42;
+  --color-primary: #4caf50;
+  --color-text: #eee;
+}
+
+/* Base styles */
 body {
   margin: 0;
   padding: 0;
@@ -17,18 +25,40 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  transition: background 0.5s ease;
+  transition: background 0.5s ease, color 0.3s ease;
   background: linear-gradient(to bottom, var(--color-bg-default), #e0f7fa);
+}
+
+/* 🌗 Theme Toggle */
+#themeToggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  z-index: 1000;
+}
+#themeToggle:hover {
+  transform: rotate(15deg);
 }
 
 .container {
   background: white;
+  background: var(--color-bg-light);
   padding: 25px 30px;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   text-align: center;
   width: 90%;
-  max-width: 420px;
+  max-width: 800px;
+  transition: background 0.3s ease;
 }
 
 h1 {
@@ -51,6 +81,27 @@ input, button {
   border-radius: 8px;
   border: 1px solid #ccc;
   outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 🔘 Ripple effect */
+button::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.3);
+  top: var(--y, 0);
+  left: var(--x, 0);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+button:active::after {
+  width: 200px;
+  height: 200px;
+  transition: 0s;
 }
 
 input:focus {
@@ -64,11 +115,9 @@ button {
   cursor: pointer;
   transition: background var(--transition-fast);
 }
-
 button:hover {
   background: #026aa7;
 }
-
 #micButton {
   background: #4caf50;
 }
@@ -76,15 +125,41 @@ button:hover {
   background: #43a047;
 }
 
+/* 🧱 Dashboard layout */
+#weatherResult {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+@media (min-width: 600px) {
+  #weatherResult {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 900px) {
+  #weatherResult {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 /* 🌈 Weather card */
 .weather-card {
-  margin-top: 20px;
-  padding: 20px;
   background: var(--color-bg-light);
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   text-align: left;
-  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInCard 0.4s forwards;
+}
+@keyframes fadeInCard {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .weather-card:hover {
   box-shadow: 0 8px 24px rgba(0,0,0,0.12);
@@ -96,41 +171,31 @@ button:hover {
   align-items: center;
   gap: 15px;
 }
-
 .weather-icon {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   animation: fadeIn var(--transition-fast);
 }
 
 .weather-summary h2 {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 }
 .weather-temp {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-top: 4px;
+  font-weight: bold;
+  color: var(--color-primary);
 }
 
-.weather-details {
-  margin-top: 16px;
-  display: grid;
-  gap: 8px;
-}
 .weather-details p {
-  margin: 0;
+  margin: 4px 0;
   font-size: 0.95rem;
 }
 .weather-details .outfit {
   font-style: italic;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* 📱 Responsive */
 @media (max-width: 480px) {
   .controls { flex-direction: column; }
 }
