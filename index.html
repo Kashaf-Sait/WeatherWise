@@ -4,12 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WeatherWise</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <!-- 🌙/🌞 Theme Toggle Icon Only -->
-  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="themeBtn">🌙</button>
 
   <div class="container">
     <h1>🌤 <span>Weather</span>Wise</h1>
@@ -18,9 +22,20 @@
       <input type="text" id="cityInput" placeholder="Enter city name" />
       <button onclick="getWeather()">Get Weather</button>
       <button id="micButton" onclick="startVoice()">🎤 Speak</button>
+      <button onclick="getLocationWeather()">📍 My Location</button>
     </div>
 
-    <div id="weatherResult"><!-- Cards injected dynamically --></div>
+    <!-- Current weather info -->
+    <div id="weatherResult"></div>
+
+    <!-- Temperature Chart -->
+    <div class="chart-container">
+      <canvas id="tempChart"></canvas>
+    </div>
+
+    <!-- 3-Day Forecast -->
+    <h3 id="forecastTitle" class="forecast-title" style="display: none;">3-Day Forecast</h3>
+    <div class="forecast-grid" id="forecastCards"></div>
   </div>
 
   <script src="script.js"></script>
