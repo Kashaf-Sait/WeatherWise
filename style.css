@@ -1,3 +1,5 @@
+
+
 :root {
   --font-base: 'Inter', sans-serif;
   --color-primary: #0288d1;
@@ -20,12 +22,11 @@ body {
   font-family: var(--font-base);
   color: var(--color-text-light);
   background: var(--color-bg-default);
-    display: flex;
+  display: flex;
   justify-content: center;
-  align-items: flex-start;   /* pin container to top */
-  padding-top: 20px;          /* give some top spacing */
-  overflow-y: auto;           /* allow vertical scrolling */
-
+  align-items: flex-start;
+  padding-top: 20px;
+  overflow-y: auto;
   transition: background 0.4s ease, color 0.4s ease;
   position: relative;
 }
@@ -115,7 +116,6 @@ button:hover {
   background: #026aa7;
 }
 
-/* Mic & My Location */
 #micButton { background: #4caf50; }
 #micButton:hover { background: #43a047; }
 button:nth-child(4) { background: #ff9800; }
@@ -133,6 +133,48 @@ button:nth-child(4):hover { background: #f57c00; }
 }
 @media (min-width: 900px) {
   #weatherResult { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* Forecast Grid */
+.forecast-title {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-top: 30px;
+}
+.forecast-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 16px;
+  margin-bottom: 40px;
+  padding: 0 10px;
+}
+.forecast-grid .weather-card {
+  flex: 1 1 160px;
+}
+.forecast-grid img {
+  width: 50px;
+  height: 50px;
+  margin: 10px 0;
+}
+
+/* Chart Container */
+.chart-container {
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  padding: 8px;
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  margin: 20px auto;
+  box-sizing: border-box;
+}
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /* Weather Cards */
@@ -165,55 +207,20 @@ body.dark .weather-card {
 }
 .weather-icon { width: 60px; height: 60px; }
 .weather-summary h2 { margin: 0; font-size: 1.2rem; }
-.weather-temp { font-size: 1.1rem; font-weight: bold; margin-top: 4px; color: var(--color-primary); }
+.weather-temp {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 4px;
+  color: var(--color-primary);
+}
 .weather-details p { margin: 4px 0; font-size: 0.95rem; }
 .weather-details .outfit { font-style: italic; }
-
-/* Forecast Title */
-.forecast-title {
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-primary);
-  margin-top: 30px;
-}
-
-/* Forecast Grid */
-.forecast-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
-  margin-bottom: 40px;
-  padding: 0 10px;
-}
-.forecast-grid .weather-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-}
-.forecast-grid img { width: 50px; height: 50px; margin: 10px 0; }
-
-/* Dark mode forecast cards */
-body.dark .forecast-grid .weather-card {
-  background: #2d3748;
-  color: var(--color-text-dark);
-}
-
-/* Chart Container */
-.chart-container {
-  width: 100%;
-  max-width: 800px;
-  height: 300px;
-  margin: 20px auto;
-  position: relative;
-}
-.chart-container canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
 
 /* Mobile tweaks */
 @media (max-width: 480px) {
   .controls { flex-direction: column; }
   .chart-container { height: 200px; }
 }
+
+/* Landscape / Two‑column layout */
+/* …your existing landscape rules… */
